@@ -333,7 +333,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "test_project_good.kicad_pro",
+    "filename": "test_project_missing_symbol.kicad_pro",
     "version": 1
   },
   "net_settings": {
@@ -414,10 +414,6 @@
     [
       "9538e4ed-27e6-4c37-b989-9859dc0d49e8",
       ""
-    ],
-    [
-      "1f72982d-1aa7-468c-a035-7868113dba21",
-      "testSheet"
     ]
   ],
   "text_variables": {}

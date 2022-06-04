@@ -1,5 +1,5 @@
 (fp_lib_table
   (lib (name "Capacitor_SMD")(type "KiCad")(uri "${CUSTOM_LIB_PATH}/kicad-footprints/Capacitor_SMD.pretty")(options "")(descr ""))
   (lib (name "Resistor_SMD")(type "KiCad")(uri "${CUSTOM_LIB_PATH}/kicad-footprints/Resistor_SMD.pretty")(options "")(descr ""))
-  (lib (name "test_lib")(type "KiCad")(uri "${KIPRJMOD}/test_project_libs/test_lib.pretty")(options "")(descr ""))
+  (lib (name "test_lib")(type "KiCad")(uri "${KIPRJMOD}/test_project_libs_bad/test_lib.pretty")(options "")(descr ""))
 )

@@ -333,7 +333,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "tes_project_bad_table.kicad_pro",
+    "filename": "test_project_bad_lib_path.kicad_pro",
     "version": 1
   },
   "net_settings": {

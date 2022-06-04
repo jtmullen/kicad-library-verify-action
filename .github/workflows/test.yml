@@ -1,0 +1,19 @@
+name: Tests for Library Verify Action
+on: [push, pull_request]
+
+jobs:
+  run_tests:
+    runs-on: ubunut-latest
+    name: Run All run_tests
+    steps: 
+    - name: Checkout This Repo
+      uses: actions/checkout@v2
+    - name: Checkout KiCad Libraries
+      run: |
+        git clone https://gitlab.com/kicad/libraries/kicad-footprints.git libs/kicad-footprints
+        git clone https://gitlab.com/kicad/libraries/kicad-symbols.git libs/kicad-symbols
+    - name: Test All Test Files
+      uses: ./
+      id: test-all
+      with: 
+        check_all: true

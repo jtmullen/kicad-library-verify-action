@@ -1,3 +1,0 @@
-(fp_lib_table
-  (lib (name "Capacitor_SMD")(type "KiCad")(uri "${CUSTOM_LIB_PATH}/kicad-footprints/Capacitor_SMD.pretty")(options "")(descr ""))
-)

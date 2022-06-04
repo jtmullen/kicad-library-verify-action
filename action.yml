@@ -1,0 +1,25 @@
+name: 'KiCad Library Verify Action'
+author: 'jtmullen'
+description: 'Check that all symbols and footprints match the libraries'
+branding:
+  icon: 'check-circle'
+  color: 'green'
+inputs:
+  check_all:
+    descripton: "Check all files instead of just those changed"
+    required: false
+    default: 'false'
+  base_dir:
+    descripton: "Path to the base_dir of the repo, if not default"
+    required: false
+    default: "/" 
+  path_config:
+    description: "Path to the path configuraton file, if not default. Relative to base_dir"
+    required: false
+    default: ".github/path-config.yml"
+outputs:
+  fails:
+    description: "File(s) that failed, if run failed"
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
