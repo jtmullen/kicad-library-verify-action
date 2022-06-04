@@ -3,7 +3,7 @@ on: [push, pull_request]
 
 jobs:
   run_tests:
-    runs-on: ubunut-latest
+    runs-on: ubunutu-latest
     name: Run All run_tests
     steps: 
     - name: Checkout This Repo
