@@ -522,7 +522,7 @@ def main():
     if failed:
         core.set_failed("Failed: Could not verify all symbols/footprints")
 
-    core.log("All Good!")
+    core.info("All Good!")
 
 
 
