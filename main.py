@@ -516,9 +516,10 @@ def main():
     if checkAll:
         failed = checkAllFromBaseDir(baseDir)
 
+    core.set_output("fails", failed)
+    core.debug("Failed array: " + failed)
+
     if failed:
-        core.debug("Failed array: " + failed)
-        core.set_output("fails", failed)
         core.set_failed("Failed: Could not verify all symbols/footprints")
 
     core.log("All Good!")
