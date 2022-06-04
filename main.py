@@ -273,9 +273,6 @@ def checkPCB(pcbFile, libDict):
                 core.error("Could not open Library File at: {}".format(libDict[libName]))
                 allGood = False
                 continue
-            if not os.path.isfile(libFile):
-                print("Bad file")
-                return False
 
             cleanList(modList)
             libFPList = getNeededFootprintFields(modList)
@@ -320,6 +317,9 @@ def checkPCB(pcbFile, libDict):
         core.info("No Footprints Found")
         
     core.end_group()
+    
+    if not allGood:
+        core.error("{} has error(s)".format(pcbFile))
 
     return allGood 
 
@@ -395,7 +395,7 @@ def checkSCH(schFile, libDict):
                         break
 
             if not symFound:
-                core.error("Symbol {modName} not found in Library {libName}")
+                core.error("Symbol {} not found in Library {}".format(modName, libName))
                 allGood = False
                 continue
 
@@ -414,6 +414,9 @@ def checkSCH(schFile, libDict):
         core.info("No Symbols Found")
         
     core.end_group()
+
+    if not allGood:
+        core.error("{} has error(s)".format(schFile))
 
     return allGood
         
@@ -491,8 +494,11 @@ def checkAllFromBaseDir(baseDir):
 
     dirs = list(set(dirs))
 
+    failed = []
     for directory in dirs:
-        checkAllInProjectDir(directory + "/")
+        failed.extend(failedcheckAllInProjectDir(directory + "/"))
+
+    return failed
 
 
 
@@ -510,9 +516,13 @@ def main():
     checkAll = core.get_input('check_all', required=False)
 
     setUpPathReplace(baseDir + configPath)
+    failed = []
     if checkAll:
-        checkAllFromBaseDir(baseDir)
+        failed = checkAllFromBaseDir(baseDir)
 
+    if failed:
+        core.set_failed("Failed: Mismatches Found")
+        core.set_output("failed", failed)
 
 
 
