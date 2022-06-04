@@ -518,6 +518,7 @@ def main():
 
     if failed:
         core.set_failed("Failed: Could not verify all symbols/footprints")
+        core.debug("Failed array: " + failed)
         core.set_output("fails", failed)
 
 
