@@ -17,3 +17,6 @@ jobs:
       id: test-all
       with: 
         check_all: true
+    - name: Print Fails
+      run: |
+        echo "${{ steps.test-all.outputs.fails }}"

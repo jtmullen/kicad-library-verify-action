@@ -225,6 +225,7 @@ def unFlipFootprint(fp):
 ## But we have to do some transformations to get to a state to compare 
 def checkPCB(pcbFile, libDict):
 
+    nameOnly = os.path.basename(pcbFile)
     core.start_group("Checking PCB:  {}".format(pcbFile))
 
     pcbList = []
@@ -254,7 +255,7 @@ def checkPCB(pcbFile, libDict):
 
             ## Make sure the library is in the lib table
             if libDict.get(libName, None) is None:
-                core.error('Library "{libName}" not found')
+                core.error('{}: Library "{}" not found'.format(nameOnly, libName))
                 allGood = False
                 continue
 
@@ -266,11 +267,11 @@ def checkPCB(pcbFile, libDict):
                 with open(libFile, 'r') as f:
                     modList = parseSexp(f.read())
             except FileNotFoundError:
-                core.error("Library File not found at: {}".format(libDict[libName]))
+                core.error("{}: Library File not found at: {}".format(nameOnly, libDict[libName]))
                 allGood = False
                 continue
             except IOError:
-                core.error("Could not open Library File at: {}".format(libDict[libName]))
+                core.error("{}: Could not open Library File at: {}".format(nameOnly, libDict[libName]))
                 allGood = False
                 continue
 
@@ -310,16 +311,13 @@ def checkPCB(pcbFile, libDict):
                 core.debug(libFPList)
                 core.debug("PCB Footprint:")
                 core.debug(pcbFPList)
-                core.error("Footprint {} does not match Library".format(modName))
+                core.error("{}: Footprint {} does not match Library".format(nameOnly, modName))
                 allGood = False
 
     else:
         core.info("No Footprints Found")
         
     core.end_group()
-    
-    if not allGood:
-        core.error("{} has error(s)".format(pcbFile))
 
     return allGood 
 
@@ -331,6 +329,7 @@ def checkPCB(pcbFile, libDict):
 ## regardless of how many instances it has. 
 def checkSCH(schFile, libDict):
 
+    nameOnly = os.path.basename(schFile)
     core.start_group("Checking Schematic:  {}".format(schFile))
 
     schList = []
@@ -368,7 +367,7 @@ def checkSCH(schFile, libDict):
 
             ## Make sure library is in this table:
             if libDict.get(libName, None) is None:
-                core.error('Library "{libName}" not found')
+                core.error('{}: Library "{}" not found'.format(nameOnly, libName))
                 allGood = False
                 continue
 
@@ -377,11 +376,11 @@ def checkSCH(schFile, libDict):
                 with open(libDict[libName], 'r') as f:
                     libList = parseSexp(f.read())
             except FileNotFoundError:
-                core.error("Library File not found at: {}".format(libDict[libName]))
+                core.error("{}: Library File not found at: {}".format(nameOnly, libDict[libName]))
                 allGood = False
                 continue
             except IOError:
-                core.error("Could not open Library File at: {}".format(libDict[libName]))
+                core.error("{}: Could not open Library File at: {}".format(nameOnly, libDict[libName]))
                 allGood = False
                 continue
 
@@ -395,7 +394,7 @@ def checkSCH(schFile, libDict):
                         break
 
             if not symFound:
-                core.error("Symbol {} not found in Library {}".format(modName, libName))
+                core.error("{}: Symbol {} not found in Library {}".format(nameOnly, modName, libName))
                 allGood = False
                 continue
 
@@ -408,15 +407,12 @@ def checkSCH(schFile, libDict):
                 core.debug(libSymList)
                 core.debug("Sch Symbol:")
                 core.debug(schSymList)
-                core.error("Symbol {} does not match Library".format(modName))
+                core.error("{}: Symbol {} does not match Library".format(nameOnly, modName))
                 allGood = False
     else:
         core.info("No Symbols Found")
         
     core.end_group()
-
-    if not allGood:
-        core.error("{} has error(s)".format(schFile))
 
     return allGood
         
