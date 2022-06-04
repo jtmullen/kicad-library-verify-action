@@ -15,6 +15,7 @@ jobs:
     - name: Test All Test Files
       uses: ./
       id: test-all
+      continue-on-error: true
       with: 
         check_all: true
     - name: Print Fails

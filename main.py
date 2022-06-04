@@ -517,8 +517,8 @@ def main():
         failed = checkAllFromBaseDir(baseDir)
 
     if failed:
-        core.set_failed("Failed: Mismatches Found")
-        core.set_output("failed", failed)
+        core.set_failed("Failed: Could not verify all symbols/footprints")
+        core.set_output("fails", failed)
 
 
 
