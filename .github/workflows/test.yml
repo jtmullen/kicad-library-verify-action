@@ -25,4 +25,4 @@ jobs:
       with: 
         check_all: true
     - name: Verify Correct Failures
-      run: test '${{ steps.test-all.outputs.fails }}' = '["/github/workspace/test/test_project_bad_lib_path/test_project_bad_lib_path.kicad_pcb", "/github/workspace/test/test_project_bad_table/test_project_bad_table.kicad_sch", "/github/workspace/test/test_project_missing_symbol/test_project_missing_symbol.kicad_sch", "/github/workspace/test/test_project_modified_footprint/test_project_modified_footprint.kicad_pcb", "/github/workspace/test/test_project_modified_symbol/test_project_modified_symbol.kicad_sch"]''
+      run: test '${{ steps.test-all.outputs.fails }}' = '["/github/workspace/test/test_project_bad_lib_path/test_project_bad_lib_path.kicad_pcb", "/github/workspace/test/test_project_bad_table/test_project_bad_table.kicad_sch", "/github/workspace/test/test_project_missing_symbol/test_project_missing_symbol.kicad_sch", "/github/workspace/test/test_project_modified_footprint/test_project_modified_footprint.kicad_pcb", "/github/workspace/test/test_project_modified_symbol/test_project_modified_symbol.kicad_sch"]'
