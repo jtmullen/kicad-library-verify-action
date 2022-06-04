@@ -517,7 +517,7 @@ def main():
         failed = checkAllFromBaseDir(baseDir)
 
     failed.sort()
-    core.set_output("fails", failed
+    core.set_output("fails", failed)
     core.debug("Failed array: " + str(failed))
 
     if failed:
