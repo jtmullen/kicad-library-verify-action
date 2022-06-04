@@ -3,7 +3,6 @@ FROM python:3-slim AS builder
 COPY main.py /main.py
 
 
-RUN apk --no-cache add git
 RUN python3 -m pip install --upgrade pip
 RUN pip3 install PyYAML==6.0
 RUN pip3 install actions_toolkit==0.1.13
