@@ -21,7 +21,7 @@ def setUpPathReplace(configPath):
 
     workspacePath = os.environ["GITHUB_WORKSPACE"]
     for key in pathData:
-        pathReplaceArr.append(["${{{}}}".format(key), workspacePath + pathData[key]])
+        pathReplaceArr.append(["${{{}}}".format(key), workspacePath + "/" + pathData[key]])
 
     core.debug("Path Replace Array is: {}".format(pathReplaceArr))
 
@@ -266,11 +266,11 @@ def checkPCB(pcbFile, libDict):
                 with open(libFile, 'r') as f:
                     modList = parseSexp(f.read())
             except FileNotFoundError:
-                core.error("Library File not found at: {libDict[libName]}")
+                core.error("Library File not found at: {}".format(libDict[libName]))
                 allGood = False
                 continue
             except IOError:
-                core.error("Could not open Library File at: {libDict[libName]}")
+                core.error("Could not open Library File at: {}".format(libDict[libName]))
                 allGood = False
                 continue
             if not os.path.isfile(libFile):
@@ -377,11 +377,11 @@ def checkSCH(schFile, libDict):
                 with open(libDict[libName], 'r') as f:
                     libList = parseSexp(f.read())
             except FileNotFoundError:
-                core.error("Library File not found at: {libDict[libName]}")
+                core.error("Library File not found at: {}".format(libDict[libName]))
                 allGood = False
                 continue
             except IOError:
-                core.error("Could not open Library File at: {libDict[libName]}")
+                core.error("Could not open Library File at: {}".format(libDict[libName]))
                 allGood = False
                 continue
 
