@@ -16,10 +16,10 @@ from decimal import *
 ### Parse Path Replacement Config File into Array
 pathReplaceArr = []
 def setUpPathReplace(configPath):
-    with open(configPath) as f:
+    workspacePath = os.environ["GITHUB_WORKSPACE"]
+    with open(workspacePath + "/" + configPath) as f:
         pathData = yaml.safe_load(f)
 
-    workspacePath = os.environ["GITHUB_WORKSPACE"]
     for key in pathData:
         pathReplaceArr.append(["${{{}}}".format(key), workspacePath + "/" + pathData[key]])
 
@@ -511,7 +511,7 @@ def main():
     configPath = core.get_input('path_config', required=False)
     checkAll = core.get_input('check_all', required=False)
 
-    setUpPathReplace(baseDir + configPath)
+    setUpPathReplace(configPath)
     failed = []
     if checkAll:
         failed = checkAllFromBaseDir(baseDir)
