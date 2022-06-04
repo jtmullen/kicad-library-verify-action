@@ -496,7 +496,7 @@ def checkAllFromBaseDir(baseDir):
 
     failed = []
     for directory in dirs:
-        failed.extend(failedcheckAllInProjectDir(directory + "/"))
+        failed.extend(checkAllInProjectDir(directory + "/"))
 
     return failed
 
