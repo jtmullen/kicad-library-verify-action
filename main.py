@@ -7,8 +7,10 @@ from actions_toolkit import core
 import os
 import yaml
 import re
+import git
 import glob
 from decimal import *
+
 
 ##to do global lib tables
 
@@ -240,11 +242,11 @@ def checkPCB(pcbFile, libDict):
             if item[1] == "footprint":
                 fpList.append(item)
 
-    cleanList(fpList)
-
     allGood = True
     ## Loop Through all the Footprints
     if fpList:
+		cleanList(fpList)
+		
         for fp in fpList:
             rawName = fp[1].replace('"','')
             namelist = rawName.split(":", 1)
@@ -348,12 +350,12 @@ def checkSCH(schFile, libDict):
                         symList.append(sym)
                 break
     
-    cleanList(symList)
-    
 
     allGood = True
     ## Loop through all symbols
     if symList:
+		cleanList(symList)
+		
         for symbol in symList:
             schSymList = symbol.copy()
             rawName = schSymList[1].replace('"', '')
@@ -469,6 +471,7 @@ def checkAllInProjectDir(projectPath):
 ## Looks for all kicad pro, sch, pcb or *-lib-table
 def checkAllFromBaseDir(baseDir):
 
+	core.debug("Checking all from base directory: {}".format(baseDir))
     allKicadPro = glob.glob(baseDir + "**/*.kicad_pro", recursive = True)
     allKicadPCB = glob.glob(baseDir + "**/*.kicad_pcb", recursive = True)
     allKicadSCH = glob.glob(baseDir + "**/*.kicad_sch", recursive = True)
@@ -488,7 +491,10 @@ def checkAllFromBaseDir(baseDir):
     for file in allKicadLibFiles:
         dirs.append(os.path.dirname(file))
 
-    dirs = list(set(dirs))
+    ## remove duplicates
+	dirs = list(set(dirs))
+
+	core.debug("Directories to Check: {}".format(dirs))
 
     failed = []
     for directory in dirs:
@@ -499,9 +505,64 @@ def checkAllFromBaseDir(baseDir):
 
 
 ##Checks all files in any directory where a kicad file has changed
-def checkAllChanged():
+def checkAllChanged(baseDir):
+	
+	core.debug("Checking all files in directory with changed file from base dir: {}".format(baseDir))
 
-    return 1
+	with open(os.environ["GITHUB_EVENT_PATH"], 'r') as f:
+        eventInfo = json.load(f)
+	
+	repoName = eventInfo['repository']['full_name']
+	## Figure out what we are running on
+	isPR = False
+	if "pull_request" in eventInfo:
+		prNum = eventInfo['pull_request']['number']
+		prBranch = eventInfo['pull_request']['head']['ref']
+		prBase = eventInfo['pull_request']['base']['ref']
+		prUser = eventInfo['pull_request']['user']['login']
+		core.debug("Run for PR#: {} in {} by {}".format(prNum, repoName, prUser))
+		core.debug"Branch {} into base {}".format(prBranch, prBase))
+		isPR = True
+	elif "after" in eventInfo:
+		toHash = eventInfo['after']
+		fromHash = eventInfo['before']
+		branchName = eventInfo['ref']
+		core.debug("Run for push on branch: {}".format(branchName))
+		core.debug"Hash {} to {}".format(fromHash, toHash))
+	else:
+		core.set_failed("Error: Config Requires Push or PR Event")
+
+	allChangedFiles = []
+	dirs = []
+
+    format = '--name-only'
+	repo = git.Git(baseDir)
+	if isPR:
+		diffed = repo.diff('origin/%s...origin/%s' % (prBase, prBranch), format).split('\n')
+	else:
+		diffed = diffed = repo.diff('%s...%s' % (fromHash, toHash), format).split('\n')
+	
+	for line in diffed:
+		if len(line):
+			allChangedFiles.append(line)
+	
+	for file in allChangedFiles:
+		if(file.endswith(".kicad_pro")
+		    or file.endswith(".kicad_sch")
+			or file.endswith(".kicad_pcb")
+			or file.endswith("-lib-table"))
+			dirs.append(os.path.dirname(file))
+	
+	## remove duplicates
+	dirs = list(set(dirs))
+
+	core.debug("Directories to Check: {}".format(dirs))
+	
+    failed = []
+    for directory in dirs:
+        failed.extend(checkAllInProjectDir(directory + "/"))
+
+    return failed
 
 
 def main():
@@ -515,6 +576,8 @@ def main():
     failed = []
     if checkAll:
         failed = checkAllFromBaseDir(baseDir)
+	else:
+		failed = checkAllChanged(baseDir)
 
     failed.sort()
     core.set_output("fails", failed)
@@ -522,11 +585,8 @@ def main():
 
     if failed:
         core.set_failed("Failed: Could not verify all symbols/footprints")
-
-    core.info("All Good!")
-
-
-
+	else:
+		core.info("All Good!")
 
 
 
