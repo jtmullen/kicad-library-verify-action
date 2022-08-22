@@ -570,7 +570,7 @@ def main():
     workspacePath = os.environ["GITHUB_WORKSPACE"]
     baseDir = workspacePath + core.get_input('base_dir', required=False)
     configPath = core.get_input('path_config', required=False)
-    checkAll = core.get_input('check_all', required=False)
+    checkAll = core.get_boolean_input('check_all', required=False)
 
     setUpPathReplace(configPath)
     failed = []
