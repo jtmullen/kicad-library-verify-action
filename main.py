@@ -103,7 +103,7 @@ def unRotateFootprint(fp, rotation):
                 for component in item:
                     if component[0] == "at":
                         if len(component) == 4:
-                            component[3] = str(in(component[3]) - int(rotation))
+                            component[3] = str(int(component[3]) - int(rotation))
                         else:
                             component.append(str(0 - int(rotation)))
                         break
