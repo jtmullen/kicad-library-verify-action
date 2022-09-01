@@ -373,6 +373,11 @@ def checkSCH(schFile, libDict):
                 core.error('{}: Library "{}" not found'.format(nameOnly, libName))
                 allGood = False
                 continue
+            
+            if not libDict[libName].endswith(".kicad_sym"):
+                core.error('{}: Library File "{}" is not a kicad v6 symbol library'.format(nameOnly, libDict[libName]))
+                allGood = False
+                continue
 
             ## Get the library file
             try:
