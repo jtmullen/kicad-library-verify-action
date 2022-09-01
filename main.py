@@ -100,10 +100,13 @@ def unRotateFootprint(fp, rotation):
     for item in fp:
         if isinstance(item, list):
             if item[0] == "pad":
-                if len(item[4]) == 4:
-                    item[4][3] = str(int(item[4][3]) - int(rotation))
-                else:
-                    item[4].append(str(0 - int(rotation)))
+                for component in item:
+                    if component[0] == "at":
+                        if len(component) == 4:
+                            component[3] = str(int(item[4][3]) - int(rotation))
+                        else:
+                            component.append(str(0 - int(rotation)))
+                        break
 
                 if int(item[4][3])%360 == 0:
                     del item[4][3]
