@@ -106,10 +106,10 @@ def unRotateFootprint(fp, rotation):
                             component[3] = str(int(component[3]) - int(rotation))
                         else:
                             component.append(str(0 - int(rotation)))
+                        
+                        if int(component[3])%360 == 0:
+                            del component[3]                      
                         break
-
-                if int(item[4][3])%360 == 0:
-                    del item[4][3]
     return fp
 
 
